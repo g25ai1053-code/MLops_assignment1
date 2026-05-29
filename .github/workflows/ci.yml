@@ -1,0 +1,36 @@
+name: ML Ops CI Pipeline
+
+# Trigger on any push to the kernelridge branch
+on:
+  push:
+    branches:
+      - kernelridge
+
+jobs:
+  train-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the code
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # 3. Install the dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4. Run and display the performance of the DecisionTree model
+      - name: Train & test DecisionTreeRegressor (train.py)
+        run: python train.py
+
+      # 5. Run and display the performance of the KernelRidge model
+      - name: Train & test KernelRidge (train2.py)
+        run: python train2.py
